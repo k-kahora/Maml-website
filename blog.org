@@ -174,3 +174,7 @@ docker run my-flake-docker-image:latest
 Success!!
 
 This is the basic setup for getting a python project up and running and packages into a docker container
+
+* Adding python packages to poetry
+
+I was having issues adding fastapi to poetry due to an issue with watchfiles 0.24.0 so I installed fastapi and unvicorn via nix instead

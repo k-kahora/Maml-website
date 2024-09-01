@@ -6,3 +6,9 @@ rm_all_images:
 
 info:
 	poetry config --list # see where the dependices are actually installed
+
+show:
+	# Show all packages installed in your poetry packages
+	poetry show
+run:
+	fastapi dev main.py

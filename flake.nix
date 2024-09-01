@@ -1,9 +1,13 @@
 
+
+  
+
+
 {
   description = "A simple poetry project";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix.url = "github:nix-community/poetry2nix";
   };
@@ -12,8 +16,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
-        inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryEnv;
+        nodePackages = pkgs.nodePackages;
+        inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication mkPoetryEnv;
 
         project-new = mkPoetryApplication {
           projectDir = ./.; # Replace with actual project directory
@@ -37,7 +41,10 @@
         };
         defaultPackage = dockerImage;
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [dep-env poetry];
+          packages = with pkgs; [dep-env poetry python3Packages.fastapi python3Packages.uvicorn
+            nodePackages.vscode-langservers-extracted
+
+];
          };
       });
 }
