@@ -178,3 +178,60 @@ This is the basic setup for getting a python project up and running and packages
 * Adding python packages to poetry
 
 I was having issues adding fastapi to poetry due to an issue with watchfiles 0.24.0 so I installed fastapi and unvicorn via nix instead
+
+* NPM Packages
+Cheeky workaround while I try to find a nix soloution.  
+
+#+begin_src sh
+
+npm config set prefix '~/mutable_node_modules
+
+#+end_src 
+
+** Vite and react 
+Typical setup here have not figured out how to integrate with nixos yet :(
+
+
+* PlantUML for diagrams
+#+begin_src plantuml :file ./hello-uml.png
+
+!theme spacelab
+
+package "Frontend" {
+	[FastAPI] as F 
+	API - F
+
+	note top of F: FastAPI handles requests to run code
+
+	note left of F
+	This will run as a docker container,
+	It will be decoupled from the Vite frontend
+        end note
+
+        [Graffiti] as G
+        F --> G
+        G --> API
+
+        note left of G
+	Reveices the code as plain text from FastApi,
+	Runs the code then sends back its output to fastapi
+        end note
+}
+
+package "Backend" {
+
+[Vite] as V
+V -Left-> TextEditor
+V -right-> OutputRegion
+TextEditor -> API
+API -> OutputRegion
+[React] as R
+OutputRegion ..> R
+note left of R: React will display the output
+
+}
+
+
+#+end_src
+#+RESULTS:
+[[file:./hello-uml.png]]

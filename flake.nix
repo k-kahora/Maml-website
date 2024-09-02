@@ -43,6 +43,8 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [dep-env poetry python3Packages.fastapi python3Packages.uvicorn
             nodePackages.vscode-langservers-extracted
+                                 
+nodejs_22
 
 ];
          };
