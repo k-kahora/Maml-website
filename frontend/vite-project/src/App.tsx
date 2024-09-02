@@ -5,34 +5,13 @@ import 'ace-builds/src-noconflict/mode-javascript';
 
 import 'ace-builds/src-noconflict/theme-github';
 
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query';
+import axios from "axios";
 
 const queryClient = new QueryClient()
 
 
-function Example() {
-  const { isLoading, error, data } = useQuery('repoData', () =>
-    fetch('https://api.github.com/repos/tannerlinsley/react-query').then(res =>
-      res.json()
-    )
-  )
-
-  if (isLoading) return 'Loading...'
-
-  if (error) return 'An error has occurred: ' + error.message
-
-  return (
-    <div>
-      <h1>{data.name}</h1>
-      <p>{data.description}</p>
-      <strong>👀 {data.subscribers_count}</strong>{' '}
-      <strong>✨ {data.stargazers_count}</strong>{' '}
-      <strong>🍴 {data.forks_count}</strong>
-    </div>
-  )
-}
-
-function Example2() {
+function GetData() {
   const { isLoading, error, data } = useQuery('repoData', () =>
     fetch('http://localhost:8000/things').then(res =>
       res.json()
@@ -48,13 +27,41 @@ function Example2() {
   )
 }
 
-
 function SubmitCode({code}) {
-    function onClick() {
-	console.log(code)
+    const mutation = useMutation((d) => {
+	return axios.post("http://localhost:8000/process-code",d)
+    })
+    
+    const submitData = () => {
+	mutation.mutate({"input":code})
     }
-    return <button onClick={onClick} className="submit">Submit</button>
+
+    if (mutation.isLoading) return 'Loading...'
+
+    if (mutation.error) return 'An error has occurred: ' + mutation.error.message
+ if (mutation.isSuccess) {
+    // Handle the case where the mutation was successful
+     console.log(mutation.data?.data?.output)
+    const output = mutation.data?.data?.output; // Safely access the nested data
+    return (
+      <div>
+        <h3>Success</h3>
+        <p>Processed Output: {output}</p>
+      </div>
+    );
+  }    
+  return (
+    <div>
+      <h1>Submit Code</h1>
+      <button onClick={submitData}>Submit Code</button>
+    </div>
+  );
+
 }
+
+
+
+
 
 function MyEditorComponent() {
 
@@ -87,10 +94,13 @@ function MyEditorComponent() {
 		tabSize: 2,
 	    }}
 	/>
-	<SubmitCode code={code}/>
 
     <QueryClientProvider client={queryClient}>
-      <Example2 />
+      <GetData />
+    </QueryClientProvider>
+
+    <QueryClientProvider client={queryClient}>
+      <SubmitCode code={code}/>
     </QueryClientProvider>
 	</>
     );

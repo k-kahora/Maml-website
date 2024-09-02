@@ -3,6 +3,10 @@ from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+class Code(BaseModel):
+    input: str
 
 
 # Enable CORS
@@ -33,4 +37,11 @@ async def submit_text(input_text: str = Form(...)):
 
 @app.get("/things")
 async def read():
-    return {"hello":"world"}
+    return {"hello":"panckace"}
+
+@app.post("/process-code")
+async def post_code(code: Code):
+    input = code.input
+    output = input[::-1]
+    return {"output": output}
+
