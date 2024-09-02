@@ -10,3 +10,12 @@ https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-plantuml.html
 - 3 leetcodes
 - Run
 - Text Anthony to see Rachel with tim
+
+### Libs used
+- Vite
+- React
+- Ace
+
+### Helpful articles used
+
+https://www.dhiwise.com/post/a-guide-to-using-react-ace-for-efficient-coding
