@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 import AceEditor from 'react-ace';
-
-
 import 'ace-builds/src-noconflict/mode-javascript';
 
 import 'ace-builds/src-noconflict/theme-github';
+
+import { useQuery } from "react-query"; // NOTE what the hell is axios and react query
+import axios from "axios";
 
 function SubmitCode({code}) {
     function onClick() {
@@ -13,7 +14,6 @@ function SubmitCode({code}) {
     }
     return <button onClick={onClick} className="submit">Submit</button>
 }
-
 
 function MyEditorComponent() {
 
@@ -24,14 +24,14 @@ function MyEditorComponent() {
     function onChange(newValue) {
 	setCode(newValue);
     }
-
+    
     return (
 	<>
 	<AceEditor
 	    mode="javascript"
 	    theme="github"
 	    onChange={onChange}
-	    name="UNIQUE_ID_OF_DIV"
+	    name="editior"
 	    editorProps={{ $blockScrolling: true }}
 	    fontSize={14}
 	    showPrintMargin={true}
@@ -50,6 +50,5 @@ function MyEditorComponent() {
 	</>
     );
 }
-
 
 export default MyEditorComponent;
