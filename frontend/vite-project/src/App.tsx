@@ -11,51 +11,56 @@ import axios from "axios";
 const queryClient = new QueryClient()
 
 
-function GetData() {
-  const { isLoading, error, data } = useQuery('repoData', () =>
-    fetch('http://localhost:8000/things').then(res =>
-      res.json()
-    )
-  )
+// function GetData() {
+//   const { isLoading, error, data } = useQuery('repoData', () =>
+//     fetch('http://localhost:8000/things').then(res =>
+//       res.json()
+//     )
+//   )
 
-  if (isLoading) return 'Loading...'
+//   if (isLoading) return 'Loading...'
 
-  if (error) return 'An error has occurred: ' + error.message
+//   if (error) return 'An error has occurred: ' + error.message
 
+//   return (
+//       <h1>{data.hello}</h1>
+//   )
+// }
+
+function SubmitButton({ onClick, isLoading }) {
   return (
-      <h1>{data.hello}</h1>
-  )
-}
-
-function SubmitCode({code}) {
-    const mutation = useMutation((d) => {
-	return axios.post("http://localhost:8000/process-code",d)
-    })
-    
-    const submitData = () => {
-	mutation.mutate({"input":code})
-    }
-
-    if (mutation.isLoading) return 'Loading...'
-
-    if (mutation.error) return 'An error has occurred: ' + mutation.error.message
- if (mutation.isSuccess) {
-    // Handle the case where the mutation was successful
-     console.log(mutation.data?.data?.output)
-    const output = mutation.data?.data?.output; // Safely access the nested data
-    return (
-      <div>
-        <h3>Success</h3>
-        <p>Processed Output: {output}</p>
-      </div>
-    );
-  }    
-  return (
-    <div>
-      <h1>Submit Code</h1>
-      <button onClick={submitData}>Submit Code</button>
-    </div>
+    <button onClick={onClick} disabled={isLoading}>
+      {isLoading ? 'Loading...' : 'Submit Code'}
+    </button>
   );
+}
+
+
+function OutputBox({ output }) {
+  return (
+      <h1>{output}</h1>
+  );
+}
+
+// This should return the posted data
+function SubmitCode({code, success, error}) {
+ const mutation = useMutation(() => {
+    return axios.post("http://localhost:8000/process-code", { input: code });
+  });  // const mutation = useMutation((newPost) =>
+  //   axios.post("https://jsonplaceholder.typicode.com/posts", newPost),
+  // );
+    const handleSubmit = () => {
+	mutation.mutate(null,{ // NOTE Why does null matter here
+	    onSuccess: (data) => {
+		success(data?.data?.output || 'No output');
+	    },
+	    onError: (error) => {
+		error(`An error occurred: ${error.message}`);
+	    }
+	});
+    };
+    
+    return <SubmitButton onClick={handleSubmit} isLoading={mutation.isLoading}/>
 
 }
 
@@ -63,15 +68,23 @@ function SubmitCode({code}) {
 
 
 
-function MyEditorComponent() {
+function Editor() {
 
     const [code, setCode] = useState('let x <- 64; x * 2');
-    function onChange(newValue) {
-	console.log('change', newValue);
-    }
+    const [output, setOutput] = useState('output');
     function onChange(newValue) {
 	setCode(newValue);
     }
+
+    const handleSuccess = (output) => {
+	setOutput(output);
+    };
+
+    const handleError = (error) => {
+	setOutput(error);
+    };
+
+    
     
     return (
 	<>
@@ -94,16 +107,13 @@ function MyEditorComponent() {
 		tabSize: 2,
 	    }}
 	/>
-
     <QueryClientProvider client={queryClient}>
-      <GetData />
+	<SubmitCode success={handleSuccess} error={handleError} code={code}/>
     </QueryClientProvider>
+	<OutputBox output={output}/>
 
-    <QueryClientProvider client={queryClient}>
-      <SubmitCode code={code}/>
-    </QueryClientProvider>
 	</>
     );
 }
 
-export default MyEditorComponent;
+export default Editor;
