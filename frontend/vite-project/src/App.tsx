@@ -43,16 +43,16 @@ function OutputBox({ output }) {
 }
 
 // This should return the posted data
-function SubmitCode({code, success, error}) {
+function ExecuteCode({code, success, error}) {
  const mutation = useMutation(() => {
-    return axios.post("http://localhost:8000/process-code", { input: code });
+    return axios.post("http://localhost:8000/ocaml", {input:code});
   });  // const mutation = useMutation((newPost) =>
   //   axios.post("https://jsonplaceholder.typicode.com/posts", newPost),
   // );
     const handleSubmit = () => {
 	mutation.mutate(null,{ // NOTE Why does null matter here
 	    onSuccess: (data) => {
-		success(data?.data?.output || 'No output');
+		success(data?.data?.result || 'No output');
 	    },
 	    onError: (error) => {
 		error(`An error occurred: ${error.message}`);
@@ -63,10 +63,6 @@ function SubmitCode({code, success, error}) {
     return <SubmitButton onClick={handleSubmit} isLoading={mutation.isLoading}/>
 
 }
-
-
-
-
 
 function Editor() {
 
@@ -84,8 +80,6 @@ function Editor() {
 	setOutput(error);
     };
 
-    
-    
     return (
 	<>
 	<AceEditor
@@ -107,11 +101,10 @@ function Editor() {
 		tabSize: 2,
 	    }}
 	/>
-    <QueryClientProvider client={queryClient}>
-	<SubmitCode success={handleSuccess} error={handleError} code={code}/>
-    </QueryClientProvider>
 	<OutputBox output={output}/>
-
+	<QueryClientProvider client={queryClient}>
+	  <ExecuteCode success={handleSuccess} error={handleError} code={code}/>
+        </QueryClientProvider>
 	</>
     );
 }

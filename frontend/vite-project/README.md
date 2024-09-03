@@ -51,4 +51,5 @@ export default tseslint.config({
 
 # TODO
 
-- [ ] Do not delete the button every time code is submitted
+- [x] Do not delete the button every time code is submitted
+- [ ] Actually run the code with ocaml and return that result

@@ -193,43 +193,50 @@ Typical setup here have not figured out how to integrate with nixos yet :(
 
 
 * PlantUML for diagrams
+
+This is all within a docker network
+
 #+begin_src plantuml :file ./hello-uml.png
+
 
 !theme spacelab
 
-package "Frontend" {
-	[FastAPI] as F 
+package "Backend" {
+
+        folder "APIContainer" {
+	  [FastAPI] as F 
+	}
 	API - F
 
 	note top of F: FastAPI handles requests to run code
 
-	note left of F
-	This will run as a docker container,
-	It will be decoupled from the Vite frontend
-        end note
 
-        [Graffiti] as G
+        folder "GraffitiContainer" {
+          [Graffiti] as G
+	}
         F --> G
         G --> API
-
         note left of G
 	Reveices the code as plain text from FastApi,
 	Runs the code then sends back its output to fastapi
         end note
 }
 
-package "Backend" {
+package "Frontend" {
 
+        folder "FrontEnd container" {
 [Vite] as V
 V -Left-> TextEditor
 V -right-> OutputRegion
+
 TextEditor -> API
 API -> OutputRegion
 [React] as R
 OutputRegion ..> R
 note left of R: React will display the output
+			
 
-}
+		}
 
 
 #+end_src

@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+import subprocess
 
 class Code(BaseModel):
     input: str
@@ -25,6 +26,26 @@ app.add_middleware(
 
 # Serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.post("/ocaml")
+async def run_ocaml_job(input_data: Code):
+    try:
+        # Construct the Docker run command
+        result = subprocess.run(
+
+            ["docker", "run", "graffiti-image:latest", "-e",  input_data.input],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
+        # Process the output from the OCaml executable
+        output = result.stdout.strip()
+        return {"result": output}
+
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(status_code=500, detail=f"Job failed: {e.stderr}")
 
 @app.get("/")
 def index():
