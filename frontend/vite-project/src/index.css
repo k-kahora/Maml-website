@@ -4,6 +4,14 @@ html, body, #root {
   width: 100%;
 }
 
+
+.layout {
+  width: 100%;
+  max-width: 1200px; /* Set your desired max-width */
+  margin: 0 auto;    /* Centers the container */
+  padding: 0 20px;   /* Optional: horizontal padding */
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -38,8 +46,8 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  /* min-width: 320px; */
+  /* min-height: 100vh; */
 }
 
 h1 {
@@ -79,10 +87,16 @@ button:focus-visible {
   }
 }
 
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 1400px;
   .navbar-right {
     display: flex;
     align-items: center;
@@ -93,6 +107,51 @@ button:focus-visible {
   .logo {
     height: 10rem;
   }
+}
+
+.terminal {
+  background-color: #1C1D1E;
+  border-radius: 20px;
+  height: 500px;
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid grey;
+    padding-bottom: 23px;
+    .circle {
+      width: 25px;
+      height: 25px;
+      border: 4px solid black;  /* Circle border */
+      border-radius: 50%;       /* Makes the div a circle */
+      background-color: transparent;  /* Hollow inside */
+      /* Optional: Center the circle */
+      margin-left: 20px;
+      margin-top: 20px;
+      &:nth-child(1) {
+        border-color: red;
+      }
+      &:nth-child(2) {
+        border-color: yellow;
+      }
+      &:nth-child(3) {
+        border-color: green;
+      }
+    }
+  }
+  .body {
+    padding: 20px;
+    p,pre {
+      color: white;
+      font-size: 20px;
+    }
+    span {
+      color: blue;
+    }
+    .response {
+      color: grey;
+    }
+  }
+
 }
 
 

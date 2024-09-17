@@ -1,29 +1,58 @@
 import React, { useState } from 'react';
 import mamlLogo from './assets/maml.png';
-
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-javascript';
-
 import 'ace-builds/src-noconflict/theme-github';
-
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query';
 import axios from "axios";
-
 const queryClient = new QueryClient()
+
+function LayOut({children}) {
+  return <div className="layout">{children}</div>
+}
+
+function Terminal() {
+  return <>
+    <div className="terminal">
+      <div className="header">
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
+      </div>
+      <div className="body">
+        {/* This needs to be a whitespace font */}
+        <p>=={`>`} <span>let</span> x = 30;</p>
+        <p>=={`>`} x</p>
+        <p className="response">30</p>
+        <p>=={`>`} <span>let</span> fact = fn(x) {"{"}</p>
+        <pre>       if ( x {"<"} 1 ) </pre>
+        <pre>         {"{"} 1 {"}"} </pre>
+        <pre>       else {"{"} </pre>
+
+        <pre>         x * fact(x - 1) </pre>
+        <pre>       {"}"}</pre>
+        <pre>    {"}"}</pre>
+        <p>=={`>`} <span>puts</span>(fact(5))</p>
+        <p className="response">120</p>
+      </div>
+    </div>
+  </>
+}
 
 function NavBar() {
   return (
-<nav className="navbar">
-  <div className="navbar-left">
-    <img src={mamlLogo} alt="Logo" className="logo"/>
-  </div>
-  <div className="navbar-right">
-    <button className="nav-button">Button 1</button>
-    <button className="nav-button">Button 2</button>
-    <button className="nav-button">Button 3</button>
-  </div>
-</nav>
-
+    <div className="nav-container">
+      <nav className="navbar">
+        <div className="navbar-left">
+          <img src={mamlLogo} alt="Logo" className="logo"/>
+        </div>
+        <div className="navbar-right">
+          <button className="nav-button">Docs</button>
+          <button className="nav-button">Code</button>
+          <button className="nav-button">About</button>
+        </div>
+      </nav>
+    </div>
   )
 }
 
@@ -66,7 +95,15 @@ function ExecuteCode({code, success, error}) {
 
 function Editor() {
 
-    const [code, setCode] = useState('let x <- 64; x * 2');
+    const [code, setCode] = useState(`let fact = fn(x) {
+  if ( x < 2 ) {
+    1
+  }
+  else {
+    x * fact(x - 1)
+  }
+puts(fact(5))
+}`);
     const [output, setOutput] = useState('output');
     function onChange(newValue) {
 	setCode(newValue);
@@ -82,6 +119,7 @@ function Editor() {
 
     return (
 	<>
+      <LayOut>
       <NavBar/>
 	<AceEditor
 	    mode="javascript"
@@ -106,6 +144,8 @@ function Editor() {
 	<QueryClientProvider client={queryClient}>
 	  <ExecuteCode success={handleSuccess} error={handleError} code={code}/>
         </QueryClientProvider>
+        <Terminal/>
+      </LayOut>
 	</>
     );
 }
