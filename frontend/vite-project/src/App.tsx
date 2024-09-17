@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import mamlLogo from './assets/maml.png';
 
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-javascript';
@@ -10,22 +11,21 @@ import axios from "axios";
 
 const queryClient = new QueryClient()
 
+function NavBar() {
+  return (
+<nav className="navbar">
+  <div className="navbar-left">
+    <img src={mamlLogo} alt="Logo" className="logo"/>
+  </div>
+  <div className="navbar-right">
+    <button className="nav-button">Button 1</button>
+    <button className="nav-button">Button 2</button>
+    <button className="nav-button">Button 3</button>
+  </div>
+</nav>
 
-// function GetData() {
-//   const { isLoading, error, data } = useQuery('repoData', () =>
-//     fetch('http://localhost:8000/things').then(res =>
-//       res.json()
-//     )
-//   )
-
-//   if (isLoading) return 'Loading...'
-
-//   if (error) return 'An error has occurred: ' + error.message
-
-//   return (
-//       <h1>{data.hello}</h1>
-//   )
-// }
+  )
+}
 
 function SubmitButton({ onClick, isLoading }) {
   return (
@@ -82,6 +82,7 @@ function Editor() {
 
     return (
 	<>
+      <NavBar/>
 	<AceEditor
 	    mode="javascript"
 	    theme="github"
