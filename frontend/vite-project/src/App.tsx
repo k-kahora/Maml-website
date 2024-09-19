@@ -5,10 +5,28 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-github';
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query';
 import axios from "axios";
+import { renderToStaticMarkup } from 'react-dom/server';
 const queryClient = new QueryClient()
 
-function LayOut({children}) {
-  return <div className="layout">{children}</div>
+
+function Grid() {
+  return (
+  <div className="container">
+      <NavBar />
+      <Editor />
+      <Terminal />
+  </div>
+  )
+
+}
+
+function App() {
+  return (
+  <div className="App">
+      < Grid/>
+  </div>
+
+  ) 
 }
 
 function Terminal() {
@@ -118,9 +136,7 @@ puts(fact(5))
     };
 
     return (
-	<>
-      <LayOut>
-      <NavBar/>
+      <div className='editior'>
 	<AceEditor
 	    mode="javascript"
 	    theme="github"
@@ -144,10 +160,8 @@ puts(fact(5))
 	<QueryClientProvider client={queryClient}>
 	  <ExecuteCode success={handleSuccess} error={handleError} code={code}/>
         </QueryClientProvider>
-        <Terminal/>
-      </LayOut>
-	</>
+        </div>
     );
 }
 
-export default Editor;
+export default App;
