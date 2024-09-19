@@ -242,3 +242,8 @@ note left of R: React will display the output
 #+end_src
 #+RESULTS:
 [[file:./hello-uml.png]]
+
+* References
+https://www.dhiwise.com/post/a-guide-to-using-react-ace-for-efficient-coding
+
+https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-plantuml.html
