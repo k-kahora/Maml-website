@@ -6,12 +6,6 @@ html, body, #root {
 }
 
 
-.layout {
-  width: 100%;
-  max-width: 1200px; /* Set your desired max-width */
-  margin: 0 auto;    /* Centers the container */
-  padding: 0 20px;   /* Optional: horizontal padding */
-}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -88,13 +82,6 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  /* min-width: 320px; */
-  /* min-height: 100vh; */
-}
 
 h1 {
   font-size: 3.2em;
@@ -133,48 +120,47 @@ button:focus-visible {
   }
 }
 
+
 .container {
-  padding: 2rem;
   display: grid;
-  grid-template-columns: 2fr 5fr;
-  grid-template-rows: 200px 1fr;
-  grid-template-areas:
-    'sidebar header'
-    'sidebar main';
-}
-
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  grid-area: header;
-}
-
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1400px;
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    .nav-button:hover {
-      color: #777;
-    }
-  }
-  .logo {
-    height: 10rem;
+  height: 100vh;
+  grid-template-columns: 1fr 2fr 4fr 4fr;
+  grid-template-rows: 1fr 4fr 1fr; 
+  grid-template-areas: 
+    'sidebar logo header header'
+    'sidebar description code output'
+    'footer footer footer footer'
+    ;
+  overflow: hidden;
+  padding: 1rem;
+  grid-gap: 1rem;
+  img {
+    box-sizing: border-box;
+    max-width: 100%;
   }
 }
 
-.editor {
-  grid-area: sidebar;
+@media screen and (max-width:550px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 3fr 3fr 2fr 1fr;
+    grid-template-areas: 
+      'logo'
+      'header'
+      'description'
+      'code'
+      'output'
+      'footer';
+
+  }
+    
 }
 
 .terminal {
   background-color: #1C1D1E;
   border-radius: 20px;
-  height: 500px;
-  grid-area: main;
+  /* height: 500px; */
+  grid-area: 2 / 3 / 7 / 5;
   .header {
     display: flex;
     justify-content: flex-start;
@@ -213,7 +199,6 @@ button:focus-visible {
       color: grey;
     }
   }
-
 }
 
 

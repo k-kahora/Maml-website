@@ -8,13 +8,14 @@ import axios from "axios";
 import { renderToStaticMarkup } from 'react-dom/server';
 const queryClient = new QueryClient()
 
-
 function Grid() {
   return (
   <div className="container">
-      <NavBar />
+      {/*
       <Editor />
+      <NavBar/>
       <Terminal />
+      */}
   </div>
   )
 
@@ -59,20 +60,14 @@ function Terminal() {
 
 function NavBar() {
   return (
-    <div className="nav-container">
-      <nav className="navbar">
-        <div className="navbar-left">
-          <img src={mamlLogo} alt="Logo" className="logo"/>
-        </div>
-        <div className="navbar-right">
-          <button className="nav-button">Docs</button>
-          <button className="nav-button">Code</button>
-          <button className="nav-button">About</button>
-        </div>
-      </nav>
-    </div>
+          <>
+      <img src={mamlLogo} alt="" />
+ </>
   )
 }
+          // <button className="nav-button">Docs</button>
+          // <button className="nav-button">Code</button>
+          // <button className="nav-button">About</button>
 
 function SubmitButton({ onClick, isLoading }) {
   return (
@@ -136,7 +131,7 @@ puts(fact(5))
     };
 
     return (
-      <div className='editior'>
+      <div className='editor'>
 	<AceEditor
 	    mode="javascript"
 	    theme="github"
