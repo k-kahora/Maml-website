@@ -98,6 +98,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  grid-area: submit;
 }
 button:hover {
   border-color: #646cff;
@@ -121,39 +122,80 @@ button:focus-visible {
 }
 
 
+.App {
+}
+
+.nav-bar {
+  background-color: blue;
+  margin: 1rem;
+  height: 95vh;
+  width: 5rem;
+  position: fixed;
+}
+
 .container {
   display: grid;
-  height: 100vh;
+  height: 1000px;
+  /* height: 100vh; */
   grid-template-columns: 1fr 2fr 4fr 4fr;
-  grid-template-rows: 1fr 4fr 1fr; 
+  grid-template-rows: 1fr 4fr 1fr 0.5fr; 
   grid-template-areas: 
-    'sidebar logo header header'
+    'sidebar logo title header'
     'sidebar description code output'
-    'footer footer footer footer'
+    'sidebar description submit output'
+    'sidebar footer footer footer'
     ;
-  overflow: hidden;
   padding: 1rem;
   grid-gap: 1rem;
   img {
-    box-sizing: border-box;
+  /*   box-sizing: border-box; */
+    grid-area: logo;
     max-width: 100%;
+    min-width: 0;
+    justify-self: start;
+  }
+  h1 {
+    grid-area: title;
+    justify-self: center;
+    align-self: center;
+    font-size: 10em;
+  }
+  .output {
+    grid-area: output;
+  }
+  .editor {
+    grid-area: code;
+  }
+  .code-button {
+    grid-area: description;
+  }
+}
+
+@media screen and (max-width:1100px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0,20fr) 20fr 5fr 5fr; 
+    grid-template-areas: 
+      'logo title'
+      'description code'
+      'output output'
+      'footer footer';
   }
 }
 
 @media screen and (max-width:550px) {
   .container {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 3fr 3fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 3fr 3fr 2fr 1fr;
     grid-template-areas: 
       'logo'
+      'title'
       'header'
       'description'
       'code'
       'output'
       'footer';
-
   }
-    
 }
 
 .terminal {

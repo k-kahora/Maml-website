@@ -37,6 +37,8 @@ async def run_ocaml_job(input_data: Code):
         )
         # Process the output from the OCaml executable
         output = result.stdout.strip()
+        print(result.stdout)
+        print("herer")
         return {"result": output}
 
     except subprocess.CalledProcessError as e:

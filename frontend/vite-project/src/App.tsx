@@ -10,13 +10,17 @@ const queryClient = new QueryClient()
 
 function Grid() {
   return (
+      <><NavBar />
   <div className="container">
+      <img src={mamlLogo} alt="" />
+      <Editor /> 
       {/*
       <Editor />
       <NavBar/>
       <Terminal />
       */}
   </div>
+  </>
   )
 
 }
@@ -60,9 +64,9 @@ function Terminal() {
 
 function NavBar() {
   return (
-          <>
-      <img src={mamlLogo} alt="" />
- </>
+    <div className="nav-bar">
+      <p>Printing</p>
+    </div>
   )
 }
           // <button className="nav-button">Docs</button>
@@ -77,38 +81,9 @@ function SubmitButton({ onClick, isLoading }) {
   );
 }
 
-
-function OutputBox({ output }) {
-  return (
-      <h1>{output}</h1>
-  );
-}
-
-// This should return the posted data
-function ExecuteCode({code, success, error}) {
- const mutation = useMutation(() => {
-    return axios.post("http://localhost:8000/ocaml", {input:code});
-  });  // const mutation = useMutation((newPost) =>
-  //   axios.post("https://jsonplaceholder.typicode.com/posts", newPost),
-  // );
-    const handleSubmit = () => {
-	mutation.mutate(null,{ // NOTE Why does null matter here
-	    onSuccess: (data) => {
-		success(data?.data?.result || 'No output');
-	    },
-	    onError: (error) => {
-		error(`An error occurred: ${error.message}`);
-	    }
-	});
-    };
-    
-    return <SubmitButton onClick={handleSubmit} isLoading={mutation.isLoading}/>
-
-}
-
 function Editor() {
-
-    const [code, setCode] = useState(`let fact = fn(x) {
+  const [code, setCode] = useState(`
+let fact = fn(x) {
   if ( x < 2 ) {
     1
   }
@@ -116,47 +91,131 @@ function Editor() {
     x * fact(x - 1)
   }
 puts(fact(5))
-}`);
-    const [output, setOutput] = useState('output');
-    function onChange(newValue) {
-	setCode(newValue);
-    }
+`);
+  const [output, setOutput] = useState('output');
 
-    const handleSuccess = (output) => {
-	setOutput(output);
-    };
+  const handleSuccess = (output) => {
+    setOutput(output);
+  };
 
-    const handleError = (error) => {
-	setOutput(error);
-    };
+  const handleError = (error) => {
+    setOutput(error);
+  };
 
-    return (
-      <div className='editor'>
-	<AceEditor
-	    mode="javascript"
-	    theme="github"
-	    onChange={onChange}
-	    name="editior"
-	    editorProps={{ $blockScrolling: true }}
-	    fontSize={14}
-	    showPrintMargin={true}
-	    showGutter={true}
-	    highlightActiveLine={true}
-	    value={code}
-	    setOptions={{
-		enableBasicAutocompletion: false,
-		enableLiveAutocompletion: false,
-		enableSnippets: false,
-		showLineNumbers: true,
-		tabSize: 2,
-	    }}
-	/>
-	<OutputBox output={output}/>
-	<QueryClientProvider client={queryClient}>
-	  <ExecuteCode success={handleSuccess} error={handleError} code={code}/>
-        </QueryClientProvider>
-        </div>
-    );
+  return (
+    <>
+      <InputBox code={code} setCode={setCode} />
+      <QueryClientProvider client={queryClient}>
+        <ExecuteCode code={code} success={handleSuccess} error={handleError} />
+      </QueryClientProvider>
+      <OutputBox output={output} />
+      <Code setCode={setCode}/>
+    </>
+  );
+}
+    
+
+
+function OutputBox({ output }) {
+  return (
+      <p className='output'>{output}</p>
+  );
 }
 
+// This should return the posted data
+function ExecuteCode({ code, success, error }) {
+  const mutation = useMutation(() => {
+    return axios.post("http://localhost:8000/ocaml", { input: code });
+  });
+
+  const handleSubmit = () => {
+    mutation.mutate(null, {
+      onSuccess: (data) => {
+        success(data?.data?.result || 'OUTPUT');
+      },
+      onError: (err) => {
+        error(`An error occurred: ${err.message}`);
+      }
+    });
+  };
+
+  return <SubmitButton onClick={handleSubmit} isLoading={mutation.isLoading} />;
+}
+
+function DescriptionInput() {
+  return 
+}
+
+function Code({ setCode }) {
+  const [codeIndex, setCodeIndex] = useState(0)
+  const tupleArray: [string, string][] = [
+    ["first", "second"],
+    ["apple", "banana"],
+    ["cat", "dog"],
+    ["foo", "bar"]
+  ];
+  function code_set(index) {
+    console.log(index)
+    setCode(tupleArray[index][0]);
+  }
+  const handleButtonClick1 = () => {
+    setCodeIndex(codeIndex + 1) 
+    code_set(codeIndex)
+  };
+
+  const handleButtonClick2 = () => {
+    setCodeIndex(codeIndex - 1) 
+    code_set(codeIndex)
+  };
+
+  return (
+    <div className="code-button">
+      <button onClick={handleButtonClick1}>Button 1</button>
+      <button onClick={handleButtonClick2}>Button 2</button>
+    </div>
+  );
+}
+
+function Description() {
+
+  return <div className="description">
+    <button>
+      Prev
+    </button>
+    <button>
+          Nex
+    </button>
+  </div>
+
+}
+
+function InputBox({ code, setCode }) {
+  function onChange(newValue) {
+    setCode(newValue);
+  }
+
+  return (
+    <div className='editor'>
+      <AceEditor
+        mode="javascript"
+        theme="github"
+        onChange={onChange}
+        name="editor"
+        editorProps={{ $blockScrolling: true }}
+        fontSize={14}
+        showPrintMargin={true}
+        showGutter={true}
+        highlightActiveLine={true}
+        value={code}
+        setOptions={{
+          enableBasicAutocompletion: false,
+          enableLiveAutocompletion: false,
+          enableSnippets: false,
+          showLineNumbers: true,
+          tabSize: 2,
+        }}
+      />
+    </div>
+  );
+}
 export default App;
