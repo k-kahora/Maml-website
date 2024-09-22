@@ -98,7 +98,6 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-  grid-area: submit;
 }
 button:hover {
   border-color: #646cff;
@@ -135,18 +134,17 @@ button:focus-visible {
 
 .container {
   display: grid;
-  height: 1000px;
+  height: 100vh;
   /* height: 100vh; */
   grid-template-columns: 1fr 2fr 4fr 4fr;
-  grid-template-rows: 1fr 4fr 1fr 0.5fr; 
+  grid-template-rows: 30px 1fr minmax(0,0.1fr) 0.1fr; 
   grid-template-areas: 
-    'sidebar logo title header'
+    'sidebar header header header'
     'sidebar description code output'
-    'sidebar description submit output'
+    'sidebar submit code output'
     'sidebar footer footer footer'
     ;
   padding: 1rem;
-  grid-gap: 1rem;
   img {
   /*   box-sizing: border-box; */
     grid-area: logo;
@@ -165,9 +163,36 @@ button:focus-visible {
   }
   .editor {
     grid-area: code;
+    #editor {
+      height: 100px;
+    }
   }
   .code-button {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 50px 1fr 1fr 50px;
+    grid-template-areas: 
+      'code-header code-header'
+      'code-desc code-desc'
+      'code-desc code-desc'
+      'prev next'
+      ;
     grid-area: description;
+    padding: 1rem;
+  }
+  .next {
+    grid-area: next;
+  }
+  .prev {
+    grid-area: prev;
+  }
+}
+.submitBox {
+  grid-area: submit;
+  justify-self: center;
+  align-self: center;
+  button {
+    height: 100%;
   }
 }
 

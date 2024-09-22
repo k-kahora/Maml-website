@@ -12,7 +12,9 @@ function Grid() {
   return (
       <><NavBar />
   <div className="container">
-      <img src={mamlLogo} alt="" />
+      {/*<img src={mamlLogo} alt="" />
+        <h1>Maml</h1>
+        */}
       <Editor /> 
       {/*
       <Editor />
@@ -75,9 +77,11 @@ function NavBar() {
 
 function SubmitButton({ onClick, isLoading }) {
   return (
-    <button onClick={onClick} disabled={isLoading}>
-      {isLoading ? 'Loading...' : 'Submit Code'}
-    </button>
+    <div className="submitBox">
+      <button onClick={onClick} disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Submit Code'}
+      </button>
+    </div>
   );
 }
 
@@ -147,46 +151,47 @@ function DescriptionInput() {
 }
 
 function Code({ setCode }) {
+
   const [codeIndex, setCodeIndex] = useState(0)
+
+  const [description, setDescription] = useState("Factorial example using recursion")
+
   const tupleArray: [string, string][] = [
-    ["first", "second"],
-    ["apple", "banana"],
-    ["cat", "dog"],
-    ["foo", "bar"]
+    ["Here is how to do hello world", "puts(\"Hello World\")"],
+    ["Here is variable assingment", "let x = 30\nlet z = 50\nputs(x - z)"],
+    ["Here is conditionals", "if (true) { puts(true) } else { puts(false) }"],
+    ["Here is arrays and dictionarys", "let array = [1,2,\"three\", \"four\"]\nlet dict = {\"key\":\"item\"}"]
   ];
-  function code_set(index) {
-    console.log(index)
-    setCode(tupleArray[index][0]);
+
+  function code_set(index: number, des_or_in: number) {
+    setCode(tupleArray[index][des_or_in]);
   }
+
   const handleButtonClick1 = () => {
-    setCodeIndex(codeIndex + 1) 
-    code_set(codeIndex)
+    setCodeIndex((prevIndex) => {
+      const newIndex = prevIndex + 1 >= tupleArray.length ? 0 : prevIndex + 1;
+      code_set(newIndex, 1);
+      setDescription(tupleArray[newIndex][0]);
+      return newIndex;
+    });
   };
 
   const handleButtonClick2 = () => {
-    setCodeIndex(codeIndex - 1) 
-    code_set(codeIndex)
+    setCodeIndex((prevIndex) => {
+      const newIndex = prevIndex - 1 < 0 ? tupleArray.length - 1 : prevIndex - 1;
+      code_set(newIndex, 1);
+      setDescription(tupleArray[newIndex][0]);
+      return newIndex;
+    });
   };
 
   return (
     <div className="code-button">
-      <button onClick={handleButtonClick1}>Button 1</button>
-      <button onClick={handleButtonClick2}>Button 2</button>
+      <button className='next' onClick={handleButtonClick1}>Button 1</button>
+      <button className='prev' onClick={handleButtonClick2}>Button 2</button>
+      {description}
     </div>
   );
-}
-
-function Description() {
-
-  return <div className="description">
-    <button>
-      Prev
-    </button>
-    <button>
-          Nex
-    </button>
-  </div>
-
 }
 
 function InputBox({ code, setCode }) {
