@@ -22,7 +22,9 @@
 
 >Goal-> Create a website where users could evaluate my programming language graffiti hosted on the cloud
 
-I undestand that serverless means I will have to host my app as a docker container, however I never use docker locally due to my experince of it being much slower than an non containerized local install.  I use nix for local environments so it makse sense to use nix to make my dockeimage  [docker-nix](https://johns.codes/blog/rust-enviorment-and-docker-build-with-nix-flakes) was A great resource to get started.  
+This site is a WIP.  The idea is to host a container running ocaml so I can evaluate the language in a web browser.
+
+I use nix for local environments so it makse sense to use nix to make my docker image  [docker-nix](https://johns.codes/blog/rust-enviorment-and-docker-build-with-nix-flakes) was A great resource to get started.  
 
 
 <a id="orgab119b7"></a>
@@ -54,7 +56,7 @@ This is neede or else your result will be empty
 This is the app file, it will contain your main script. 
 
     def main():
-        print("bruh")
+        print("hello")
 
     
     poetry run runner
